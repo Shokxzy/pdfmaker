@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<title>Universal Hujjat Bot</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{color-scheme:light dark;--bg:#f3f6fb;--surface:#fff;--text:#172033;--muted:#718096;--line:#e4e9f1;--accent:#2864e8;--accent2:#7049e8;--green:#159765;--red:#dc4545;--soft:#edf3ff;--shadow:0 12px 30px rgba(28,48,86,.07);--tg-bg:var(--tg-theme-secondary-bg-color,var(--bg));--tg-surface:var(--tg-theme-bg-color,var(--surface));--tg-text:var(--tg-theme-text-color,var(--text));--tg-muted:var(--tg-theme-hint-color,var(--muted));--tg-accent:var(--tg-theme-button-color,var(--accent));--tg-button-text:var(--tg-theme-button-text-color,#fff)}
+@media(prefers-color-scheme:dark){:root{--bg:#101722;--surface:#182333;--text:#edf2f8;--muted:#9aa9bc;--line:#2b394b;--soft:#202f49;--shadow:0 12px 30px rgba(0,0,0,.2)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:var(--tg-bg);color:var(--tg-text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}body{padding:16px 14px calc(108px + env(safe-area-inset-bottom));line-height:1.45;max-width:760px;margin:auto}button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.top{display:flex;align-items:center;gap:13px;margin:3px 2px 18px}.brand-icon{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;color:#fff;font-size:26px;background:linear-gradient(135deg,#2864e8,#7950e8);box-shadow:0 9px 20px #2864e833}.top h1{font-size:21px;line-height:1.15;margin:0;font-weight:800;letter-spacing:-.4px}.top p{font-size:12.5px;color:var(--tg-muted);margin:5px 0 0}
+.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:6px;background:var(--tg-surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);margin-bottom:15px}.tab{min-width:0;min-height:66px;padding:8px 4px;border-radius:13px;background:transparent;color:var(--tg-muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11.5px;font-weight:700;transition:.2s}.tab .ico{font-size:21px;line-height:1.1}.tab.active{background:var(--tg-accent);color:var(--tg-button-text);box-shadow:0 5px 14px color-mix(in srgb,var(--tg-accent) 30%,transparent)}.panel{display:none;animation:appear .25s ease}.panel.active{display:block}@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.intro{margin:4px 2px 13px}.intro h2{font-size:18px;margin:0 0 4px;letter-spacing:-.2px}.intro p{font-size:12.5px;color:var(--tg-muted);margin:0}.card{background:var(--tg-surface);border:1px solid var(--line);border-radius:19px;padding:15px;margin:12px 0;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;margin:0 0 12px}.step{width:25px;height:25px;border-radius:9px;background:var(--soft);color:var(--tg-accent);display:grid;place-items:center;font-size:12px}.count{margin-left:auto;color:var(--tg-accent);font-size:11px;background:var(--soft);padding:4px 8px;border-radius:20px}.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;min-height:120px;padding:18px;border:1.7px dashed color-mix(in srgb,var(--tg-accent) 55%,var(--line));border-radius:15px;background:var(--soft);color:var(--tg-accent);font-weight:750;cursor:pointer}.drop .big{font-size:27px}.drop small{font-size:11.5px;color:var(--tg-muted);font-weight:500}.drop.compact{min-height:60px;padding:10px;flex-direction:row}.drop.drag{outline:3px solid color-mix(in srgb,var(--tg-accent) 20%,transparent);background:color-mix(in srgb,var(--tg-accent) 18%,var(--tg-surface))}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:9px;margin-top:12px}.thumb{position:relative;aspect-ratio:3/4;border-radius:13px;overflow:hidden;border:2px solid var(--line);background:var(--tg-bg)}.thumb img{width:100%;height:100%;object-fit:cover;display:block}.thumb .page{position:absolute;left:5px;top:5px;padding:3px 7px;border-radius:7px;background:#101827d9;color:white;font-size:10px;font-weight:800}.thumb .remove{position:absolute;right:5px;top:5px;width:27px;height:27px;border-radius:50%;background:#d83f49;color:#fff;font-size:18px;line-height:1}.thumb .move{position:absolute;left:5px;right:5px;bottom:5px;display:flex;justify-content:space-between}.thumb .move button{width:30px;height:28px;border-radius:8px;background:#101827d9;color:#fff}.thumb button:disabled{opacity:.3}
+label.lbl{display:block;color:var(--tg-muted);font-size:12px;font-weight:650;margin:12px 0 5px}input[type=text],select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--tg-bg);color:var(--tg-text);padding:12px;outline:none}textarea{min-height:135px;resize:vertical;line-height:1.55}input:focus,select:focus,textarea:focus{border-color:var(--tg-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--tg-accent) 14%,transparent)}.hint{font-size:11.5px;color:var(--tg-muted);margin-top:8px}.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}.action{width:100%;padding:13px 15px;border-radius:13px;background:var(--tg-accent);color:var(--tg-button-text);font-weight:800}.action.secondary{background:var(--soft);color:var(--tg-accent)}.action.green{background:var(--green);color:white}.action:disabled{opacity:.4;cursor:not-allowed}.msg{display:none;padding:10px 12px;margin-top:10px;border:1px solid var(--line);border-radius:11px;font-size:12px;overflow-wrap:anywhere}.msg.show{display:block}.msg.error{color:var(--red);border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--tg-surface))}.msg.success{color:var(--green);border-color:var(--green);background:color-mix(in srgb,var(--green) 8%,var(--tg-surface))}.file-chip{padding:11px;border:1px solid var(--line);border-radius:11px;background:var(--tg-bg);font-size:12px;overflow-wrap:anywhere;margin-top:10px}.file-chip.ready{border-color:var(--green)}#wordPreview{display:none;max-height:300px;overflow:auto;margin-top:12px;padding:14px;background:#fff;color:#111;border-radius:12px;border:1px solid var(--line);font:13px/1.5 Arial,sans-serif}#wordPreview table{border-collapse:collapse;width:100%}#wordPreview td,#wordPreview th{border:1px solid #999;padding:4px}#wordPreview img{max-width:100%;height:auto}#wordPreview p{margin:0 0 8px}
+.bottom{position:fixed;z-index:20;left:0;right:0;bottom:0;padding:11px 14px calc(11px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--tg-surface) 90%,transparent);backdrop-filter:blur(16px);border-top:1px solid var(--line)}.bottom-inner{max-width:732px;margin:auto}.bottom button{display:none}.bottom button.visible{display:block}.busy{opacity:.75;pointer-events:none}.busy:after{content:"";display:inline-block;width:13px;height:13px;margin-left:9px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.footnote{text-align:center;color:var(--tg-muted);font-size:10.5px;margin:14px 0 0}
+#pdfViewer{position:fixed;inset:0;z-index:200;background:#0b1220ee;display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom))}#pdfViewer.show{display:flex}#pdfViewer .bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;color:#fff}#pdfViewer .bar strong{flex:1;font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#pdfViewer iframe{flex:1;width:100%;border:0;border-radius:12px;background:#fff}#pdfViewer .actions{display:flex;gap:8px;margin-top:10px}#pdfViewer .actions button{flex:1;padding:12px;border-radius:12px;font-weight:800}#pdfViewer .primary{background:var(--green);color:#fff}#pdfViewer .close{background:#ffffff22;color:#fff;width:auto;padding:8px 12px}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand-icon">📑</div><div><h1>Universal Hujjat Bot</h1><p>Hujjatlar bilan ishlash — oson va tez</p></div></header>
+<nav class="tabs" id="tabs" aria-label="Funksiyalar">
+ <button class="tab active" type="button" data-tab="0" aria-selected="true"><span class="ico">🖼️</span>Rasmdan PDF</button>
+ <button class="tab" type="button" data-tab="1" aria-selected="false"><span class="ico">📄</span>Word → PDF</button>
+</nav>
+<main>
+<section class="panel active" id="panel-0">
+ <div class="intro"><h2>Rasmlarni PDF ga aylantirish</h2><p>Bir nechta rasmni tartiblang va bitta PDF hujjat yarating.</p></div>
+ <div class="card"><h3 class="card-title"><span class="step">1</span> Rasmlarni tanlang <span class="count" id="imageCount"></span></h3>
+  <label class="drop" id="dropZone" for="imageInput"><span class="big">＋</span><span>Rasmlarni tanlang yoki shu yerga tashlang</span><small>JPG, PNG va boshqa rasm formatlari</small><input id="imageInput" type="file" accept="image/*" multiple hidden></label>
+  <div class="grid" id="imageGrid"></div><div class="hint" id="imageHint">Rasmlar tartibini ◀ va ▶ tugmalari bilan o‘zgartiring.</div>
+ </div>
+ <div class="card"><h3 class="card-title"><span class="step">2</span> PDF sozlamalari</h3>
+  <label class="lbl" for="perPage">Har bir betdagi rasmlar soni</label><select id="perPage"><option value="1">1 ta — to‘liq bet</option><option value="2">2 ta</option><option value="3">3 ta</option><option value="4">4 ta — 2 × 2</option><option value="6">6 ta — 2 × 3</option></select>
+  <label class="lbl" for="pdfSize">PDF hajmi (sifati)</label><select id="pdfSize"><option value="small">Kichik — eng yengil</option><option value="medium" selected>O‘rta — tavsiya etiladi</option><option value="large">Katta — eng yuqori sifat</option></select><div class="hint" id="sizeHint"></div>
+  <label class="lbl" for="pdfName">PDF fayl nomi</label><input id="pdfName" type="text" value="hujjat" maxlength="60" placeholder="Masalan: mening_hujjatim">
+  <div class="msg" id="imageMsg" role="status"></div>
+ </div>
+</section>
+<section class="panel" id="panel-1">
+ <div class="intro"><h2>Word hujjatni PDF ga aylantirish</h2><p>.docx faylni yuklang, ko‘rib chiqing va PDF sifatida saqlang.</p></div>
+ <div class="card"><h3 class="card-title"><span class="step">1</span> Word faylni yuklash</h3>
+  <label class="drop" for="wordInput"><span class="big">📁</span><span>.docx faylni tanlang</span><small>Microsoft Word hujjati</small><input id="wordInput" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden></label>
+  <div class="file-chip" id="wordFileName">Fayl tanlanmagan</div><div id="wordPreview"></div><div class="msg" id="wordMsg" role="status"></div>
+  <p class="hint">Eslatma: murakkab maket, kolontitul, matn qutilari va ayrim shriftlar asl Word hujjatidan farq qilishi mumkin.</p>
+ </div>
+</section>
+<p class="footnote">Fayllar brauzer ichida qayta ishlanadi. Serverga yuborilmaydi.</p>
+</main>
+<div class="bottom"><div class="bottom-inner"><button class="action" id="makeImagePdf" type="button" disabled>PDF yaratish va saqlash</button><button class="action green" id="makeWordPdf" type="button" disabled>PDF ga o‘tkazish va saqlash</button></div></div>
+<div id="pdfViewer" role="dialog" aria-modal="true">
+  <div class="bar"><strong id="pdfViewerName">PDF</strong><button type="button" class="close" id="pdfViewerClose">✕</button></div>
+  <iframe id="pdfViewerFrame" title="PDF"></iframe>
+  <div class="actions"><button type="button" class="primary" id="pdfViewerShare">📤 Saqlash / Ulashish</button></div>
+</div>
+<script>
+'use strict';
+const tg = window.Telegram && window.Telegram.WebApp;
+try { if (tg) { tg.ready(); tg.expand(); tg.disableVerticalSwipes?.(); } } catch (_) {}
+const $ = id => document.getElementById(id);
+const state = { images: [], wordHtml: '', wordName: 'hujjat' };
+function haptic(success=false){try{if(tg?.HapticFeedback){success?tg.HapticFeedback.notificationOccurred('success'):tg.HapticFeedback.impactOccurred('light')}}catch(_){}}
+function message(id,text,type=''){const el=$(id);el.textContent=text||'';el.className='msg'+(text?' show':'')+(type?' '+type:'')}
+function setBusy(btn,on,label){btn.disabled=on;btn.classList.toggle('busy',on);if(label)btn.textContent=on?label:btn.dataset.label}
+function switchTab(index){document.querySelectorAll('.tab').forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-selected',String(i===index))});document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===index));$('makeImagePdf').classList.toggle('visible',index===0);$('makeWordPdf').classList.toggle('visible',index===1);}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{switchTab(Number(b.dataset.tab));haptic()}));
+function safeName(value,fallback='hujjat'){let s=(value||'').replace(/[\\/:*?"<>|]+/g,'').trim().replace(/\.pdf$/i,'').slice(0,60);return (s||fallback)+'.pdf'}
+async function pickSave(name){if(typeof window.showSaveFilePicker!=='function'||window.self!==window.top)return null;try{return await window.showSaveFilePicker({suggestedName:name,types:[{description:'PDF hujjat',accept:{'application/pdf':['.pdf']}}]})}catch(e){return e&&e.name==='AbortError'?false:null}}
+function savePdf(blob,name,msgId,handle){
+  if(!(blob instanceof Blob)||!blob.size){message(msgId,'PDF fayli bo‘sh.','error');return}
+  if(handle){
+    handle.createWritable().then(async w=>{await w.write(blob);await w.close();message(msgId,'PDF saqlandi: '+(handle.name||name)+' ✓','success');haptic(true)}).catch(()=>showViewer(blob,name,msgId));
+    return;
+  }
+  showViewer(blob,name,msgId);
+}
+let _pdfUrl=null,_pdfBlob=null,_pdfName='';
+function showViewer(blob,name,msgId){
+  if(_pdfUrl){try{URL.revokeObjectURL(_pdfUrl)}catch(_){}}
+  _pdfUrl=URL.createObjectURL(blob);_pdfBlob=blob;_pdfName=name;
+  $('pdfViewerName').textContent=name;
+  $('pdfViewerFrame').src=_pdfUrl;
+  $('pdfViewer').classList.add('show');
+  message(msgId,'PDF tayyor: '+name+'. Ochilgan oynada “Saqlash / Ulashish” tugmasini bosing.','success');
+  haptic(true);
+}
+async function sharePdf(){
+  if(!_pdfBlob) return;
+  const file=new File([_pdfBlob],_pdfName,{type:'application/pdf'});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file]});haptic(true);return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  const a=document.createElement('a');a.href=_pdfUrl;a.download=_pdfName;document.body.appendChild(a);a.click();a.remove();
+}
+$('pdfViewerClose').addEventListener('click',()=>{$('pdfViewer').classList.remove('show');$('pdfViewerFrame').src='about:blank'});
+$('pdfViewerShare').addEventListener('click',sharePdf);
+const PRESETS={small:{max:1100,q:.6,mb:.15,label:'Kichik'},medium:{max:1700,q:.8,mb:.4,label:'O‘rta'},large:{max:2480,q:.92,mb:1.1,label:'Katta'}};
+function drawImage(file,max,q){return new Promise((resolve,reject)=>{if(!file.type.startsWith('image/'))return reject(new Error('Rasm formati noto‘g‘ri'));const url=URL.createObjectURL(file);const img=new Image();img.onload=()=>{try{const scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);resolve({data:canvas.toDataURL('image/jpeg',q),w,h,name:file.name});canvas.width=canvas.height=0}catch(e){reject(e)}finally{URL.revokeObjectURL(url)}};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error(file.name))};img.src=url})}
+async function loadImage(file){const t=await drawImage(file,420,.7);t.file=file;return t}
+$('imageInput').addEventListener('change',e=>{const files=Array.from(e.target.files||[]);e.target.value='';addImages(files)});
+async function addImages(files){if(!files.length)return;message('imageMsg','Rasmlar yuklanmoqda...');let failed=[];for(const file of files){try{if(state.images.length>=100){failed.push('100 ta rasm limiti');break}state.images.push(await loadImage(file))}catch(_){failed.push(file.name)}}renderImages();message('imageMsg',failed.length?'Yuklanmagan: '+failed.join(', '):'',failed.length?'error':'')}
+const drop=$('dropZone');['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));drop.addEventListener('drop',e=>addImages(Array.from(e.dataTransfer.files||[]).filter(f=>f.type.startsWith('image/'))));
+function perPage(){return Number($('perPage').value)||1}
+function renderImages(){const grid=$('imageGrid'),n=perPage();grid.replaceChildren();state.images.forEach((item,i)=>{const box=document.createElement('div');box.className='thumb';const img=document.createElement('img');img.src=item.data;img.alt='Rasm '+(i+1);const page=document.createElement('span');page.className='page';page.textContent=(Math.floor(i/n)+1)+'-bet';const del=document.createElement('button');del.className='remove';del.type='button';del.textContent='×';del.setAttribute('aria-label','Rasmni o‘chirish');del.onclick=()=>{state.images.splice(i,1);renderImages();haptic()};const move=document.createElement('div');move.className='move';[-1,1].forEach(dir=>{const b=document.createElement('button');b.type='button';b.textContent=dir<0?'◀':'▶';b.disabled=i+dir<0||i+dir>=state.images.length;b.setAttribute('aria-label',dir<0?'Chapga surish':'O‘ngga surish');b.onclick=()=>{[state.images[i],state.images[i+dir]]=[state.images[i+dir],state.images[i]];renderImages();haptic()};move.appendChild(b)});box.append(img,page,del,move);grid.appendChild(box)});updateSizeHint();$('imageCount').textContent=state.images.length?state.images.length+' ta · '+Math.ceil(state.images.length/n)+' bet':'';$('imageHint').style.display=state.images.length>1?'':'none';$('dropZone').classList.toggle('compact',state.images.length>0);$('makeImagePdf').disabled=!state.images.length}
+function updateSizeHint(){const pr=PRESETS[$('pdfSize').value]||PRESETS.medium,n=state.images.length;if(!n){$('sizeHint').textContent='Kichik ≈ 0.15 MB, O‘rta ≈ 0.4 MB, Katta ≈ 1 MB (har bir rasm uchun).';return}const mb=n*pr.mb;$('sizeHint').textContent='Taxminiy PDF hajmi: ≈ '+(mb<1?mb.toFixed(2):mb.toFixed(1))+' MB ('+pr.label+', '+n+' ta rasm). Rasm murakkabligiga qarab farq qiladi.'}
+$('perPage').addEventListener('change',renderImages);$('pdfSize').addEventListener('change',updateSizeHint);
+async function generateImagePdf(){if(!state.images.length)return;const handle=await pickSave(safeName($('pdfName').value));if(handle===false)return;const btn=$('makeImagePdf');btn.dataset.label='PDF yaratish va saqlash';setBusy(btn,true,'PDF tayyorlanmoqda...');message('imageMsg','PDF yaratilmoqda...');try{if(!window.jspdf?.jsPDF)throw new Error('PDF kutubxonasi yuklanmadi. Internetni tekshiring.');const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:'mm',format:'a4',compress:true});const n=perPage(),layout={1:[1,1],2:[1,2],3:[1,3],4:[2,2],6:[2,3]}[n];const [cols,rows]=layout,PW=210,PH=297,M=n===1?0:9,G=5,cw=(PW-2*M-G*(cols-1))/cols,ch=(PH-2*M-G*(rows-1))/rows;const pr=PRESETS[$('pdfSize').value]||PRESETS.medium;for(let i=0;i<state.images.length;i++){message('imageMsg','Rasm '+(i+1)+' / '+state.images.length+' tayyorlanmoqda...');const it=await drawImage(state.images[i].file,pr.max,pr.q);const slot=i%n;if(i>0&&slot===0)pdf.addPage();const col=slot%cols,row=Math.floor(slot/cols),scale=Math.min(cw/it.w,ch/it.h),w=it.w*scale,h=it.h*scale,x=M+col*(cw+G)+(cw-w)/2,y=M+row*(ch+G)+(ch-h)/2;pdf.addImage(it.data,'JPEG',x,y,w,h,undefined,'FAST')}message('imageMsg','PDF yig‘ilmoqda...');await savePdf(pdf.output('blob'),safeName($('pdfName').value),'imageMsg',handle)}catch(e){message('imageMsg',e.message||'PDF yaratishda xatolik yuz berdi.','error')}finally{btn.classList.remove('busy');btn.textContent=btn.dataset.label;btn.disabled=!state.images.length}}
+$('makeImagePdf').addEventListener('click',generateImagePdf);
+$('wordInput').addEventListener('change',async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;state.wordHtml='';$('makeWordPdf').disabled=true;$('wordPreview').style.display='none';$('wordFileName').classList.remove('ready');if(!/\.docx$/i.test(file.name)){message('wordMsg','Faqat .docx formatidagi fayl qo‘llab-quvvatlanadi.','error');return}if(file.size>20*1024*1024){message('wordMsg','Fayl hajmi 20 MB dan oshmasligi kerak.','error');return}message('wordMsg','Word fayli o‘qilmoqda...');try{if(!window.mammoth)throw new Error('Word kutubxonasi yuklanmadi. Internetni tekshiring.');const result=await mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});if(!result.value.trim())throw new Error('Hujjat ichida o‘qiladigan matn topilmadi.');state.wordHtml=result.value;state.wordName=file.name.replace(/\.docx$/i,'');$('wordPreview').innerHTML=result.value;$('wordPreview').style.display='block';$('wordFileName').textContent='✓ '+file.name+' · '+Math.max(1,Math.round(file.size/1024))+' KB';$('wordFileName').classList.add('ready');$('makeWordPdf').disabled=false;message('wordMsg','Hujjat tayyor. PDF yaratish mumkin.','success')}catch(err){message('wordMsg',err.message||'Word faylini o‘qib bo‘lmadi.','error')}});
+async function convertWordPdf(){if(!state.wordHtml)return;const handle=await pickSave(safeName(state.wordName));if(handle===false)return;const btn=$('makeWordPdf');btn.dataset.label='PDF ga o‘tkazish va saqlash';setBusy(btn,true,'PDF tayyorlanmoqda...');message('wordMsg','PDF yaratilmoqda...');const holder=document.createElement('div');holder.style.cssText='position:fixed;left:-100000px;top:0;width:794px;padding:42px;background:#fff;color:#111;font:14px/1.55 Arial,sans-serif;z-index:-1';holder.innerHTML='<style>table{border-collapse:collapse;width:100%;page-break-inside:auto}tr{page-break-inside:avoid}td,th{border:1px solid #888;padding:5px}img{max-width:100%;height:auto}p{margin:0 0 9px;orphans:3;widows:3}h1,h2,h3{page-break-after:avoid}ul,ol{padding-left:24px}</style>'+state.wordHtml;document.body.appendChild(holder);try{if(!window.html2pdf)throw new Error('PDF kutubxonasi yuklanmadi. Internetni tekshiring.');const blob=await html2pdf().set({margin:[12,12,12,12],filename:safeName(state.wordName),image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy']}}).from(holder).outputPdf('blob');await savePdf(blob,safeName(state.wordName),'wordMsg',handle)}catch(err){message('wordMsg',err.message||'PDF yaratishda xatolik yuz berdi.','error')}finally{holder.remove();btn.classList.remove('busy');btn.textContent=btn.dataset.label;btn.disabled=!state.wordHtml}}
+$('makeWordPdf').addEventListener('click',convertWordPdf);
+renderImages();switchTab(0);
+</script>
+</body>
+</html>
